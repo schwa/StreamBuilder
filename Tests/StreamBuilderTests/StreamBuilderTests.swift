@@ -1,12 +1,40 @@
+import CoreGraphics
 import XCTest
-@testable import StreamBuilder
+/*@testable*/ import StreamBuilder
 
 final class StreamBuilderTests: XCTestCase {
-    func testExample() throws {
-        // XCTest Documentation
-        // https://developer.apple.com/documentation/xctest
+    func testStreamBuilder() throws {
+        let stream = MyType().body
+        let atom = stream.makeAtom()
+        print(atom)
+    }
+}
 
-        // Defining Test Cases and Test Methods
-        // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
+struct MyType: StreamElement {
+    var body: some StreamElement {
+        Stack {
+            Group {
+                Text("A")
+            }
+            Text("B")
+            Labelled(label: "Point", content: { CGPoint(x: 10, y: 20) })
+        }
+    }
+}
+
+extension CGPoint: StreamElement {
+    public var body: some StreamElement {
+        Labelled {
+            Text("X")
+        } content: {
+            Text("\(x)")
+        }
+        Text(", ")
+        Labelled {
+            Text("Y")
+        } content: {
+            Text("\(y)")
+        }
+
     }
 }

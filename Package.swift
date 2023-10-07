@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "StreamBuilder",
+    platforms: [.macOS(.v14)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -12,12 +13,17 @@ let package = Package(
             targets: ["StreamBuilder"]),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "StreamBuilder"),
-        .testTarget(
-            name: "StreamBuilderTests",
-            dependencies: ["StreamBuilder"]),
+        .target(name: "StreamBuilder",
+            swiftSettings: [
+                .enableExperimentalFeature("PackIteration"),
+            ]
+        ),
+        .testTarget(name: "StreamBuilderTests",
+            dependencies: ["StreamBuilder"],
+            swiftSettings: [
+                .enableExperimentalFeature("PackIteration"),
+            ]
+        )
     ]
 )
+
