@@ -129,7 +129,7 @@ extension Text: StringAtomConvertable {
 
 // MARK: -
 
-public struct Labelled <Label, Content>: StreamElement where Label: StreamElement, Content: StreamElement {
+public struct Labeled <Label, Content>: StreamElement where Label: StreamElement, Content: StreamElement {
     var label: Label
     var content: Content
     
@@ -143,7 +143,7 @@ public struct Labelled <Label, Content>: StreamElement where Label: StreamElemen
     }
 }
 
-public extension Labelled where Label == Text {
+public extension Labeled where Label == Text {
     init(label: String, @StreamBuilder content: () -> Content) {
         self = .init(label: {
             Text(label)
@@ -151,7 +151,7 @@ public extension Labelled where Label == Text {
     }
 }
 
-public extension Labelled where Label == Text, Content == Text {
+public extension Labeled where Label == Text, Content == Text {
     init(label: String, content: String) {
         self = .init(label: {
             Text(label)
@@ -161,7 +161,7 @@ public extension Labelled where Label == Text, Content == Text {
     }
 }
 
-extension Labelled: StringAtomConvertable {
+extension Labeled: StringAtomConvertable {
     public var atom: StringAtom {
         return .atoms([.pushDelimiter(""), label.makeAtom(), .string(": "), content.makeAtom(), .popDelimiter])
     }
@@ -245,7 +245,7 @@ extension AnyElement: StringAtomConvertable {
 public struct ForEach <Element, Content>: StreamElement where Content: StreamElement {
     let list: ListElement<Content>
 
-    init(_ data: [Element], @StreamBuilder content: (Element) -> Content) {
+    public init(_ data: [Element], @StreamBuilder content: (Element) -> Content) {
         list = ListElement(data.map { content($0) })
     }
 

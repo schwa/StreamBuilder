@@ -17,20 +17,20 @@ struct MyType: StreamElement {
                 Text("A")
             }
             Text("B")
-            Labelled(label: "Point", content: { CGPoint(x: 10, y: 20) })
+            Labeled(label: "Point", content: { CGPoint(x: 10, y: 20) })
         }
     }
 }
 
 extension CGPoint: StreamElement {
     public var body: some StreamElement {
-        Labelled {
+        Labeled {
             Text("X")
         } content: {
             Text("\(x)")
         }
         Text(", ")
-        Labelled {
+        Labeled {
             Text("Y")
         } content: {
             Text("\(y)")
