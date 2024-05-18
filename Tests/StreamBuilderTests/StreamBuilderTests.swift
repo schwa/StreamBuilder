@@ -12,7 +12,7 @@ final class StreamBuilderTests: XCTestCase {
 
 struct MyType: StreamElement {
     var body: some StreamElement {
-        Stack {
+        VStack {
             Group {
                 Text("A")
             }
@@ -24,17 +24,18 @@ struct MyType: StreamElement {
 
 extension CGPoint: StreamElement {
     public var body: some StreamElement {
-        Labeled {
-            Text("X")
-        } content: {
-            Text("\(x)")
+        HStack {
+            Labeled {
+                Text("X")
+            } content: {
+                Text("\(x)")
+            }
+            Text(",")
+            Labeled {
+                Text("Y")
+            } content: {
+                Text("\(y)")
+            }
         }
-        Text(", ")
-        Labeled {
-            Text("Y")
-        } content: {
-            Text("\(y)")
-        }
-
     }
 }

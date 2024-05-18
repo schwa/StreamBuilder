@@ -89,10 +89,12 @@ extension Group: StringAtomConvertable {
 
 // MARK: -
 
-public struct Stack <Content>: StreamElement where Content: StreamElement {
+public struct HStack <Content>: StreamElement where Content: StreamElement {
     let content: Content
-    
-    public init(@StreamBuilder content: () -> Content) {
+    let spacing: Int
+
+    public init(spacing: Int = 1, @StreamBuilder content: () -> Content) {
+        self.spacing = spacing
         self.content = content()
     }
     
@@ -101,11 +103,33 @@ public struct Stack <Content>: StreamElement where Content: StreamElement {
     }
 }
 
-extension Stack: StringAtomConvertable {
+extension HStack: StringAtomConvertable {
+    public var atom: StringAtom {
+        return .atoms([.pushDelimiter(String(repeating: " ", count: spacing)), content.makeAtom(), .popDelimiter])
+    }
+}
+
+// MARK:-
+
+public struct VStack <Content>: StreamElement where Content: StreamElement {
+    let content: Content
+
+    public init(@StreamBuilder content: () -> Content) {
+        self.content = content()
+    }
+
+    public var body: some StreamElement {
+        EmptyElement()
+    }
+}
+
+extension VStack: StringAtomConvertable {
     public var atom: StringAtom {
         return .atoms([.pushDelimiter("\n"), content.makeAtom(), .popDelimiter])
     }
 }
+
+
 
 // MARK: -
 
@@ -139,7 +163,11 @@ public struct Labeled <Label, Content>: StreamElement where Label: StreamElement
     }
     
     public var body: some StreamElement {
-        EmptyElement()
+        HStack(spacing: 0) {
+            label
+            Text(": ")
+            content
+        }
     }
 }
 
@@ -160,13 +188,6 @@ public extension Labeled where Label == Text, Content == Text {
         })
     }
 }
-
-extension Labeled: StringAtomConvertable {
-    public var atom: StringAtom {
-        return .atoms([.pushDelimiter(""), label.makeAtom(), .string(": "), content.makeAtom(), .popDelimiter])
-    }
-}
-
 
 public struct ListElement <T>: StreamElement where T: StreamElement {
     var content: [T]
