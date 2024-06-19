@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "StreamBuilder",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v14), .iOS(.v13)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
