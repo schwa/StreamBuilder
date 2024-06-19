@@ -17,17 +17,25 @@ extension StringAtom: CustomStringConvertible {
         toString(output: &s, depth: &depth, delimiterStack: &delimiterStack)
         return s
     }
-    
-    func toString(output: inout String, depth: inout Int, delimiterStack: inout [String]) {
+}
+
+public extension StringAtom {
+    func toString(output: inout some TextOutputStream) {
+        var depth = 0
+        var delimiterStack: [String] = []
+        toString(output: &output, depth: &depth, delimiterStack: &delimiterStack)
+    }
+
+    internal func toString(output: inout some TextOutputStream, depth: inout Int, delimiterStack: inout [String]) {
         switch self {
         case .string(let string):
             if depth > 0 {
                 let prefix = repeatElement(" ", count: depth).joined(separator: "")
-                output.append(prefix)
+                print(prefix, terminator: "", to: &output)
             }
-            output.append(string)
+            print(string, terminator: "", to: &output)
             if let delimiter = delimiterStack.last {
-                output.append(delimiter)
+                print(delimiter, terminator: "", to: &output)
             }
         case .atoms(let atoms):
             atoms.forEach { atom in

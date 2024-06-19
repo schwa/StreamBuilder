@@ -3,10 +3,27 @@ import XCTest
 /*@testable*/ import StreamBuilder
 
 final class StreamBuilderTests: XCTestCase {
-    func testStreamBuilder() throws {
+    func testStreamBuilder1() throws {
         let stream = MyType().body
         let atom = stream.makeAtom()
         print(atom)
+    }
+
+    func testStreamBuilder2() throws {
+        VStack {
+            Divider()
+            Text("Hello")
+            Labeled(label: "Name", content: { Text("Content")} )
+
+//            Divider()
+        }
+        .print()
+    }
+}
+
+struct Divider: StreamElement {
+    var body: some StreamElement {
+        Text("---------------------------------------")
     }
 }
 
